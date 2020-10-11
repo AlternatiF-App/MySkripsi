@@ -1,0 +1,50 @@
+.brand-logo, h2{
+    font-family: 'Grand Hotel', cursive;
+    margin-left: 10px;
+}
+
+.nav-wrapper li{
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+.nav-wrapper li:hover{
+    background-color: grey;
+}
+
+.sec-1-wrap{
+    background-image: url("assets/img/login.jpeg");
+    background-size: cover;
+    padding: 100px 0 10px 0;
+    height: 600px;
+}
+
+.head-text{
+    font-weight: bold;
+}
+
+.ava-img{
+    border-radius: 50%;
+    height: 100px;
+}
+.ava-img:hover{
+    border: black solid 3px;
+}
+
+.material-icons:hover{
+    cursor: pointer;
+    color: grey;
+}
+
+.i-edit{
+    border-radius: 50%;
+    background-color: cyan;
+    color: white;
+    margin-right: 4px;
+}
+
+.i-delete{
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+}
