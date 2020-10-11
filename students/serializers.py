@@ -2,7 +2,7 @@ from rest_framework import serializers
 from students.models import Student
 from django.contrib.auth.models import User
 
-class DemoSerializer(serializers.ModelSerializer):
+class ClustersSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     id = serializers.IntegerField()
     class Meta:

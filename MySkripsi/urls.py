@@ -17,5 +17,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', include('students.urls')),
+    path('', include('interests.urls')),
     path('api-auth/', include('rest_framework.urls')),
 ]

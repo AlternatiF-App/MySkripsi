@@ -136,9 +136,8 @@ export default class Siswa extends React.Component{
         })
         .then(res => res.json())
         .then(result => {
-            
             this.setState({
-                siswaData : result
+                siswaData : result.results
             })
             // console.log("NYOBA", result[0][1])
             // result.map(i => {
@@ -192,31 +191,31 @@ export default class Siswa extends React.Component{
                                 this.state.siswaData.map((item, i) =>{ 
                                     return(
                                     <>
-                                        <tr key={i[0]}>
-                                            <td>{item[0]}</td>
-                                            <td onClick={() => this.toggleDetail(item[0])}>
-                                                {item[1]}
+                                        <tr key={i.id}>
+                                            <td>{item.id}</td>
+                                            <td onClick={() => this.toggleDetail(item.id)}>
+                                                {item.fullname}
                                             </td>
-                                            {item[2] == 1 &&
+                                            {item.id_minat == 1 &&
                                                 <td>Matematika</td>
                                             }
-                                            {item[2] == 2 &&
+                                            {item.id_minat == 2 &&
                                                 <td>IPA</td>
                                             }
-                                            {item[2] == 3 &&
+                                            {item.id_minat == 3 &&
                                                 <td>B. Indonesia</td>
                                             }
                                             <td>
                                                 <i className="i-edit  material-icons"
-                                                    onClick={() => this.toggleUpdate(item[0])}>
+                                                    onClick={() => this.toggleUpdate(item.id)}>
                                                 edit</i>
                                                 <i className="i-delete material-icons"
-                                                    onClick={() => this.toggleDelete(item[0])}>    
+                                                    onClick={() => this.toggleDelete(item.id)}>    
                                                 delete</i>
                                             </td>
                                         </tr>
                                         {this.state.detailSiswa == true &&
-                                        this.state.dataDetail === item[0] ? (
+                                        this.state.dataDetail === item.id ? (
                                         <>
                                             <tr>
                                                 <td colSpan="4">
@@ -229,7 +228,7 @@ export default class Siswa extends React.Component{
                                                     NIS : 
                                                 </td>
                                                 <td colSpan="2">
-                                                    {item[0]}
+                                                    {item.id}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -238,7 +237,7 @@ export default class Siswa extends React.Component{
                                                     Nama Lengkap :
                                                 </td>
                                                 <td colSpan="2">
-                                                    {item[1]}
+                                                    {item.fullname}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -247,13 +246,13 @@ export default class Siswa extends React.Component{
                                                     Minat :
                                                 </td>
                                                 <td colSpan="2">
-                                                    {item[2] == 1 &&
+                                                    {item.id_minat == 1 &&
                                                         <td>Matematika</td>
                                                     }
-                                                    {item[2] == 2 &&
+                                                    {item.id_minat == 2 &&
                                                         <td>IPA</td>
                                                     }
-                                                    {item[2] == 3 &&
+                                                    {item.id_minat == 3 &&
                                                         <td>B. Indonesia</td>
                                                     }
                                                 </td>
@@ -264,7 +263,7 @@ export default class Siswa extends React.Component{
                                                     Kelas :
                                                 </td>
                                                 <td colSpan="2">
-                                                    {item[3]}
+                                                    {item.student_class}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -273,7 +272,7 @@ export default class Siswa extends React.Component{
                                                     Nilai Matematika :
                                                 </td>
                                                 <td colSpan="2">
-                                                    {item[4]}
+                                                    {item.score_math}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -282,7 +281,7 @@ export default class Siswa extends React.Component{
                                                     Nilai IPA :
                                                 </td>
                                                 <td colSpan="2">
-                                                    {item[5]}
+                                                    {item.score_science}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -291,18 +290,18 @@ export default class Siswa extends React.Component{
                                                     Nilai B. Indonesia :
                                                 </td>
                                                 <td colSpan="2">
-                                                    {item[6]}
+                                                    {item.score_indonesian}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td colSpan="4" type="text">
-                                                    {Number.parseInt(item[7], 10) == 0 &&
+                                                    {Number.parseInt(item.cluster, 10) == 0 &&
                                                         <td>Siswa ini masuk pada kelas ekstrakurikuler Matematika</td>
                                                     }
-                                                    {Number.parseInt(item[7], 10) == 1 &&
+                                                    {Number.parseInt(item.cluster, 10) == 1 &&
                                                         <td>Siswa ini masuk pada kelas ekstrakurikuler IPA</td>
                                                     }
-                                                    {Number.parseInt(item[7], 10) == 3 &&
+                                                    {Number.parseInt(item.cluster, 10) == 3 &&
                                                         <td>Siswa ini masuk pada kelas ekstrakurikuler B. Indonesia</td>
                                                     }
                                                 </td>
@@ -312,14 +311,14 @@ export default class Siswa extends React.Component{
 
                                         
                                         {this.state.updateSiswa == true &&
-                                        this.state.dataUpdate === item[0] ? (
+                                        this.state.dataUpdate === item.id ? (
                                             <>
                                             <tr>
                                                 <td className="input-field col s3">
                                                     <input name="nis" 
                                                         type="text" 
                                                         className="validate"
-                                                        placeholder={item[0]}
+                                                        placeholder={item.id}
                                                         value={nis}
                                                         onChange={this.handleChange}/>
                                                     <label for="nis">NIS</label>
@@ -328,7 +327,7 @@ export default class Siswa extends React.Component{
                                                     <input name="fullname" 
                                                         type="text" 
                                                         className="validate"
-                                                        placeholder={item[1]}
+                                                        placeholder={item.fullname}
                                                         value={fullname}
                                                         onChange={this.handleChange}/>
                                                     <label for="nama">Fullname</label>
@@ -344,7 +343,7 @@ export default class Siswa extends React.Component{
                                                     <input name="math" 
                                                         type="text" 
                                                         className="validate"
-                                                        placeholder={item[4]}
+                                                        placeholder={item.score_math}
                                                         value={math}
                                                         onChange={this.handleChange}/>
                                                     <label for="math">Nilai Matematika</label>
@@ -353,7 +352,7 @@ export default class Siswa extends React.Component{
                                                     <input name="science" 
                                                         type="text" 
                                                         className="validate"
-                                                        placeholder={item[5]}
+                                                        placeholder={item.score_science}
                                                         value={science}
                                                         onChange={this.handleChange}/>
                                                     <label for="science">Nilai IPA</label>
@@ -362,7 +361,7 @@ export default class Siswa extends React.Component{
                                                     <input name="indonesian" 
                                                         type="text" 
                                                         className="validate"
-                                                        placeholder={item[6]}
+                                                        placeholder={item.score_indonesian}
                                                         value={indonesian}
                                                         onChange={this.handleChange}/>
                                                     <label for="indonesian">Nilai B. Indonesia</label>
@@ -430,7 +429,8 @@ class FormTambah extends React.Component{
                 student_class : this.state.student_class,
                 score_math : this.state.math,
                 score_science : this.state.science,
-                score_indonesian : this.state.indonesian
+                score_indonesian : this.state.indonesian,
+                cluster:null
             })
         })
         .then(res => res.json())
@@ -442,7 +442,7 @@ class FormTambah extends React.Component{
     }
 
     componentDidMount(){
-        fetch("http://localhost:8000/minat/", {
+        fetch("http://localhost:8000/interests/", {
             method:"GET",
             headers:{
                 "Content-Type":"application/json",
@@ -452,7 +452,7 @@ class FormTambah extends React.Component{
         .then(res => res.json())
         .then(result => {
             this.setState({
-                minatData : result
+                minatData : result.results
             }) 
         })
         .catch(err => {
@@ -576,7 +576,7 @@ class ListMinat extends React.Component{
     }
 
     componentDidMount(){
-        fetch("http://localhost:8000/minat/", {
+        fetch("http://localhost:8000/interests/", {
             method:"GET",
             headers:{
                 "Content-Type":"application/json",
@@ -586,7 +586,7 @@ class ListMinat extends React.Component{
         .then(res => res.json())
         .then(result => {
             this.setState({
-                minatData : result
+                minatData : result.results
             }) 
         })
         .catch(err => {

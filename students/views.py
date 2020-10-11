@@ -1,11 +1,8 @@
 import json
-
 from rest_framework.exceptions import ValidationError
-from rest_framework.views import APIView
-
 from students.models import Student
 from django.contrib.auth.models import User
-from students.serializers import StudentSerializer, UserSerializer, DemoSerializer
+from students.serializers import StudentSerializer, UserSerializer, ClustersSerializer
 from rest_framework import permissions, status
 from students.permissions import IsOwnerOrReadOnly
 from rest_framework import generics
@@ -15,101 +12,10 @@ from copy import deepcopy
 import numpy as np
 import matplotlib.pyplot as plt
 
-class ClustersList(generics.ListCreateAPIView):
+class ClustersUpdate(generics.ListCreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        par1 = queryset.values_list('score_math', flat=True)
-        par2 = queryset.values_list('score_science', flat=True)
-        par3 = queryset.values_list('score_indonesian', flat=True)
-
-        id = queryset.values_list('id', flat=True)
-        fullname = queryset.values_list('fullname', flat=True)
-        id_minat = queryset.values_list('id_minat', flat=True)
-        student_class = queryset.values_list('student_class', flat=True)
-        owner = queryset.values_list('owner', flat=True)
-        X = np.array(list(zip(par1, par2, par3)))
-
-        def dist(a, b, ax=1):
-            return np.linalg.norm(a - b, axis=ax)
-
-        k = 3
-        C_x = [76, 62, 62]
-        C_y = [69, 77, 69]
-        C_z = [64, 64, 73]
-        C = np.array(list(zip(C_x, C_y, C_z)), dtype=np.int)
-
-        C_old = np.zeros(C.shape)
-        clusters = np.zeros(len(X))
-        error = dist(C, C_old, None)
-        while error != 0:
-            for i in range(len(X)):
-                distances = dist(X[i], C)
-                cluster = np.argmin(distances)
-                clusters[i] = cluster
-            C_old = deepcopy(C)
-            for i in range(k):
-                points = [X[j] for j in range(len(X)) if clusters[j] == i]
-                C[i] = np.mean(points, axis=0)
-            error = dist(C, C_old, None)
-        colors = ['r', 'g', 'b', 'y', 'c', 'm']
-        fig, ax = plt.subplots()
-        for i in range(k):
-            points = np.array([X[j] for j in range(len(X)) if clusters[j] == i])
-            ax.scatter(points[:, 0], points[:, 1], points[:, 2], c=colors[i])
-        ax.scatter(C[:, 0], C[:, 1], C[:, 2], marker='*', c='#050505')
-
-        kmeans = np.array(list(zip(
-            id, fullname, id_minat, student_class,
-            par1, par2, par3,
-            clusters
-        )))
-        return Response(kmeans)
-
-class TryUpdate(generics.ListCreateAPIView):
-    queryset = Student.objects.all()
-    serializer_class = StudentSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        par1 = queryset.values_list('score_math', flat=True)
-        par2 = queryset.values_list('score_science', flat=True)
-        par3 = queryset.values_list('score_indonesian', flat=True)
-
-        X = np.array(list(zip(par1, par2, par3)))
-
-        def dist(a, b, ax=1):
-            return np.linalg.norm(a - b, axis=ax)
-
-        k = 3
-        C_x = [76, 62, 62]
-        C_y = [69, 77, 69]
-        C_z = [64, 64, 73]
-        C = np.array(list(zip(C_x, C_y, C_z)), dtype=np.int)
-
-        C_old = np.zeros(C.shape)
-        clusters = np.zeros(len(X))
-        error = dist(C, C_old, None)
-        while error != 0:
-            for i in range(len(X)):
-                distances = dist(X[i], C)
-                cluster = np.argmin(distances)
-                clusters[i] = cluster
-            C_old = deepcopy(C)
-            for i in range(k):
-                points = [X[j] for j in range(len(X)) if clusters[j] == i]
-                C[i] = np.mean(points, axis=0)
-            error = dist(C, C_old, None)
-        colors = ['r', 'g', 'b', 'y', 'c', 'm']
-        fig, ax = plt.subplots()
-        for i in range(k):
-            points = np.array([X[j] for j in range(len(X)) if clusters[j] == i])
-            ax.scatter(points[:, 0], points[:, 1], points[:, 2], c=colors[i])
-        ax.scatter(C[:, 0], C[:, 1], C[:, 2], marker='*', c='#050505')
 
     def get_object(self, obj_id):
         try:
@@ -165,7 +71,7 @@ class TryUpdate(generics.ListCreateAPIView):
             obj.cluster = clusters[i]
             obj.save()
             instances.append(obj)
-        serializer = DemoSerializer(instances, many=True)
+        serializer = ClustersSerializer(instances, many=True)
         return Response(serializer.data)
 
 class StudentsList(generics.ListCreateAPIView):

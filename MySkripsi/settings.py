@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'rest_framework',
     # Students App
     'students',
+    # Interests App
+    'interests',
 
     'numpy',
     'matplotlib',
